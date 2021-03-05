@@ -1,6 +1,7 @@
 import createPool from '@databases/pg'
 import { sql } from '@databases/pg'
 import express, { response } from 'express'
+import { Post, Thread } from './boardtypes'
 
 // postgresql portion
 
@@ -29,12 +30,12 @@ app.get('/thread', async (req, res) => {
     res.send(await db.query(sql`
         SELECT * FROM posts
         WHERE parent_id=${threadId};
-    `))
+    `) as Post[])
 })
 
 app.get('/threads', async (req, res) =>
     res.send(await db.query(sql`
         SELECT * FROM threads;
-    `)))
+    `) as Thread[]))
 
 app.listen(port, () => console.log('listening'))
