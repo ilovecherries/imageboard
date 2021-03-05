@@ -12,10 +12,12 @@ const db = createPool("postgres://postgres@localhost:5432/postgres")
 const app =  express()
 const port = 8080
 
+app.use(express.static('public'))
+
 app.get('/', (req, res) => res.send('Hello, World!'))
 
 app.get('/persons', async (req, res) => res.send(await db.query(sql`
-    SELECT * FROM persons;
+    SELECT * FROM personscd ;
 `)))
 
 // get a thread by ID and the posts inside of it
