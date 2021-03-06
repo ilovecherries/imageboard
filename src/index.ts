@@ -2,6 +2,7 @@ import createPool from '@databases/pg'
 import { sql } from '@databases/pg'
 import express, { response } from 'express'
 import { Post, Thread } from './boardtypes'
+import path from 'path';
 
 // postgresql portion
 
@@ -12,9 +13,11 @@ const db = createPool("postgres://postgres@localhost:5432/postgres")
 const app =  express()
 const port = 8080
 
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
 
-app.get('/', (req, res) => res.send('Hello, World!'))
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/public/index.html'));
+});
 
 app.get('/persons', async (req, res) => res.send(await db.query(sql`
     SELECT * FROM personscd ;
@@ -33,6 +36,10 @@ app.get('/thread', async (req, res) => {
         SELECT * FROM posts
         WHERE parent_id=${threadId};
     `) as Post[])
+})
+
+app.post('/thread', async (req, res) => {
+    res.send('implementing...')
 })
 
 app.get('/threads', async (req, res) =>

@@ -1,2 +1,2 @@
 SELECT * FROM posts
-WHERE parent_id=2;
+WHERE parent_id=0;

@@ -3,7 +3,8 @@ export interface Post {
     content: string,
     parent_id: number,
     tripcode?: string,
-    attachment?: string
+    attachment?: string,
+    name: string
 }
 
 export interface Thread {
