@@ -14,6 +14,7 @@ const app =  express()
 const port = 8080
 
 app.use(express.static(__dirname + '/public'))
+app.use(express.json())
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
@@ -39,7 +40,12 @@ app.get('/thread', async (req, res) => {
 })
 
 app.post('/thread', async (req, res) => {
-    res.send('implementing...')
+    db.query(sql`
+        INSERT INTO posts (id, content, parent_id, name)
+        VALUES (DEFAULT, ${req.body.content}, ${req.body.id}, DEFAULT);
+    `)
+        .then(v => res.send({}))
+        .catch(e => {})
 })
 
 app.get('/threads', async (req, res) =>

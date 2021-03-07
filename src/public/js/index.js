@@ -1,3 +1,23 @@
+function send(e) {
+    let threadId = e.target['data-thread-id']
+    let textbox = document.getElementById(`input-area-${threadId}`)
+    console.log(textbox.value)
+    fetch('thread', {
+        'method': 'POST',
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify({
+            'content': textbox.value,
+            'id': threadId
+        })
+    })
+        .then(res => res.json())
+        .then(res => {
+            location.reload()
+        })
+}
+
 fetch('threads')
     .then(res => res.json())
     .then(threads => {
@@ -33,14 +53,20 @@ fetch('threads')
                     }
                     let sendBox = document.createElement('div')
                     let sendTextarea = document.createElement('textarea')
+                    let submitButton = document.createElement('button')
                     sendBox.classList += ' row border p-2'
                     sendTextarea.classList += ' form-control w-75'
                     sendTextarea.rows = 3
                     sendTextarea.id = `input-area-${threads[i].id}`
+                    submitButton.classList = ' w-25 btn'
+                    submitButton.textContent = "send"
+                    submitButton['data-thread-id'] = threads[i].id
+                    submitButton.addEventListener('click', send)
                     sendBox.appendChild(sendTextarea)
+                    sendBox.appendChild(submitButton)
                     postsContainer.appendChild(sendBox)
                 })
-                .catch(e => console.error('.-.'))
+                .catch(e => console.error(e))
         }
     })
     .catch(e => console.error(`oh nyo T-T: ${e}`))
